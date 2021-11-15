@@ -2,13 +2,16 @@ import { Plugin, TFile } from "obsidian";
 import { A_TAG, DEFAULT_SETTINGS } from "./const";
 import { Attr, MyPluginSettings, ParsedSemanticLink } from "./interfaces";
 import { SettingTab } from "./SettingTab";
+import SLSuggestor from "./SLSuggestor";
 
-export default class MyPlugin extends Plugin {
+export default class SLPlugin extends Plugin {
   settings: MyPluginSettings;
   index: ParsedSemanticLink[];
 
   async onload() {
     await this.loadSettings();
+
+    this.registerEditorSuggest(new SLSuggestor(this));
 
     this.addCommand({
       id: "cmd",
@@ -142,7 +145,6 @@ export default class MyPlugin extends Plugin {
       const between = content.slice(currE, nextS);
 
       const tag = between.match(A_TAG)?.[0];
-      console.log(tag);
       if (tag) {
         var { firstChild } = createEl(
           "div",
