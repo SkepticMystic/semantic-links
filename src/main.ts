@@ -137,24 +137,28 @@ export default class MyPlugin extends Plugin {
       const next = links[i + 1];
       if (!next) return;
 
-      const beforeE = curr.position.end.offset;
+      const currE = curr.position.end.offset;
       const nextS = next.position.start.offset;
-      const between = content.slice(beforeE, nextS);
+      const between = content.slice(currE, nextS);
 
-      if (A_TAG.test(between)) {
+      const tag = between.match(A_TAG)?.[0];
+      console.log(tag);
+      if (tag) {
         var { firstChild } = createEl(
-          "a",
+          "div",
           {},
-          (el) => (el.innerHTML = between.trim())
+          (el) => (el.innerHTML = tag.trim())
         );
-        const attrs: Attr[] = [...firstChild.attributes];
-        const currSL: ParsedSemanticLink = { inner: "" };
-        currSL.from = curr.link;
-        currSL.to = next.link;
-        currSL.inner = firstChild.innerText;
-        attrs.forEach((attr) => {
+
+        const currSL: ParsedSemanticLink = {
+          inner: firstChild.innerText,
+          from: curr.link,
+          to: next.link,
+        };
+
+        [...firstChild.attributes].forEach((attr: Attr) => {
           const { name, value } = attr;
-          currSL[name] = value === "" ? true : value;
+          currSL[name] = value || true;
         });
         SLs.push(currSL);
       }

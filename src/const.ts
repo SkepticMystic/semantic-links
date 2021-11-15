@@ -4,7 +4,7 @@ export const DEFAULT_SETTINGS: MyPluginSettings = {};
 
 /** Match the entire SL element */
 export const SL_ELEMENT = new RegExp(/<a.*?>.*?<\/a>/, "g");
-export const A_TAG = new RegExp(/<a.*?>.*?<\/a>/);
+export const A_TAG = new RegExp(/^\s*<a.*?>.*?<\/a>\s*$/);
 /** Match the opening tag of the SL.
  *
  * Group 1: Attributes (if none, "")
